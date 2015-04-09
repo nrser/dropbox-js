@@ -40,6 +40,8 @@ class Dropbox.Client
     @authError = null
     @_credentials = null
 
+    @asTeamMember = options.asTeamMember
+
     @setupUrls()
 
   # @property {Dropbox.Util.EventSource<Dropbox.Util.Xhr>} fires cancelable
@@ -1542,6 +1544,8 @@ class Dropbox.Client
   #   outcome of the XHR
   # @return {XMLHttpRequest} the native XHR object used to make the request
   _dispatchXhr: (xhr, callback) ->
+    if @asTeamMember
+      xhr.setHeader "X-Dropbox-Perform-As-Team-Member", @asTeamMember
     xhr.setCallback callback
     xhr.onError = @_xhrOnErrorHandler
     xhr.prepare()
